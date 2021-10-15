@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import pytest
-import time
-from selenium import webdriver
 
 # Опредлеяем класс для базовой страницы веб-сайта
 class BasePage():
