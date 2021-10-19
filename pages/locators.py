@@ -17,4 +17,7 @@ class ProductPageLocators():
     PRICE_BASKET_TOTAL = (By.XPATH, "//*[@id='messages']//p/strong")
     NAME_PRODUCT = (By.XPATH, "//li[@class='active']") 
     NAME_PRODUCT_IN_MESSAGE = (By.XPATH, "//*[@id='messages']//div[@class='alertinner ']/strong[1]")  
-    
+    SUCCESS_MESSAGE = (By.XPATH, "//*[@id='messages']/div") 
+class BasePageLocators():
+    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+    LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
