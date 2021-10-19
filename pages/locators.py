@@ -3,13 +3,22 @@
 import pytest
 from selenium.webdriver.common.by import By
 
-#определяем класс локаторов соответствующий MainPage. Для каждого класса PageObject - свой класс локаторов
-class MainPageLocators():
+class BasePageLocators():
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+    LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    BASKET_LINK = (By.XPATH, "//a[contains(@href, 'basket')][@class='btn btn-default']")
+    
+class BasketPageLocators():
+    BASKET_ITEMS = (By.XPATH, "//div[@class='basket-items']")
+    MESSAGE_OF_EMPTY_BASKET = (By.XPATH, "//*[@id='content_inner']/p")
     
 class LoginPageLocators():
     LOGIN_FORM = (By.CSS_SELECTOR, "#login_form")
-    REGISTER_FORM = (By.CSS_SELECTOR, "#register_form")
+    REGISTER_FORM = (By.CSS_SELECTOR, "#register_form")    
+    
+#определяем класс локаторов соответствующий MainPage. Для каждого класса PageObject - свой класс локаторов
+class MainPageLocators():
+    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
     
 class ProductPageLocators():
     BUTTON_ADD_TO_BASKET = (By.XPATH, "//*[@id='add_to_basket_form']/button")
@@ -18,6 +27,4 @@ class ProductPageLocators():
     NAME_PRODUCT = (By.XPATH, "//li[@class='active']") 
     NAME_PRODUCT_IN_MESSAGE = (By.XPATH, "//*[@id='messages']//div[@class='alertinner ']/strong[1]")  
     SUCCESS_MESSAGE = (By.XPATH, "//*[@id='messages']/div") 
-class BasePageLocators():
-    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
-    LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    

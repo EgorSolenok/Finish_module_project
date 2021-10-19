@@ -20,9 +20,14 @@ class BasePage():
         # self.browser.implicitly_wait(timeout)   #команда для неявного ожидания, по умолчанию в 10 секунд
     # Добавляем метод открывающий страницу, использующий метод get()
     def go_to_login_page(self):
-        link = self.browser.find_element(*BasePageLocators.LOGIN_LINK_INVALID)
+        link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
-
+        
+        #Метод, реализующий переход на страницу корзины. Не используется на самой странице корзины!!!
+    def go_to_basket_page(self):
+        link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
+        link.click()
+        
         #Метод, позволяющий определить, что элемента нет на странице и не появляется в течение 4х секунд. Передаем в метод способ локатора и его локатор.
     def is_disappeared(self, how, what, timeout=4):
         try:
