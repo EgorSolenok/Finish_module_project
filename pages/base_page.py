@@ -14,21 +14,27 @@ import time
 class BasePage():
     # Добавляем конструктор, передаем в него экземпляр драйвера и url адресс
     # Внутри конструктора сохраняем эти данные как аттрибуты нашего класса
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser, url, timeout=5):
         self.browser = browser
         self.url = url
-        # self.browser.implicitly_wait(timeout)   #команда для неявного ожидания, по умолчанию в 10 секунд
+        # Команда для неявного ожидания каждой инструкции find_element,
+        # по умолчанию в 5 секунд
+        self.browser.implicitly_wait(timeout)   
+
     # Добавляем метод открывающий страницу, использующий метод get()
     def go_to_login_page(self):
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
         
-        #Метод, реализующий переход на страницу корзины. Не используется на самой странице корзины!!!
+    # Метод, реализующий переход на страницу корзины. Не используется на
+    # самой странице корзины!!!
     def go_to_basket_page(self):
         link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         link.click()
         
-        #Метод, позволяющий определить, что элемента нет на странице и не появляется в течение 4х секунд. Передаем в метод способ локатора и его локатор.
+    # Метод, позволяющий определить, что элемента нет на странице и не
+    # появляется в течение 4х секунд. Передаем в метод способ локатора
+    # и его локатор.
     def is_disappeared(self, how, what, timeout=4):
         try:
             WebDriverWait(self.browser, timeout, 1, TimeoutException).\
@@ -37,7 +43,8 @@ class BasePage():
             return False
         return True
     
-    #реализация метода, в котором будем перехватывать исключение. how - как искать (css, id, xpath и тд) и собственно что "what" искать (строку-селектор). 
+    # Метод, в котором будем перехватывать исключение. how - как искать 
+    # (css, id, xpath и тд) и собственно что "what" искать (строку-селектор). 
     def is_element_present(self, how, what):
         try:
             self.browser.find_element(how, what)
@@ -45,7 +52,8 @@ class BasePage():
             return False
         return True
     
-        #реализация метода, в котором будем перехватывать исключение. how - как искать (css, id, xpath и тд) и собственно что "what" искать (строку-селектор). 
+    # Метод, в котором будем перехватывать исключение. how - как искать (
+    # css, id, xpath и тд) и собственно что "what" искать (строку-селектор). 
     def is_not_element_present(self, how, what, timeout=4):
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
@@ -53,22 +61,36 @@ class BasePage():
             return True
         return False
     
+    # Метод, который открывает переданный в качестве аргумента адрес.
     def open(self):
         self.browser.get(self.url)    
-    
+        
+    # Проверка на то, что пользователь залогинен (по иконке пользователя)
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON),\
+        "User icon is not presented,probably unauthorised user"
+        
+    # Проверка на наличие ссылки на переход на страницу логина  
     def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
-                    
+        assert self.is_element_present(*BasePageLocators.LOGIN_LINK),\
+        "Login link is not presented"
 
-    #реализация метода, который  нужен для проверки того, что вы написали тест на Selenium. После этого вы получите код, который нужно ввести в качестве ответа на данное задание. Код будет выведен в консоли интерпретатора, в котором вы запускаете тест. Не забудьте в конце теста добавить проверки на ожидаемый результат
+# Метод, который  нужен для проверки того, что вы написали тест на Selenium.
+# После этого вы получите код, который нужно ввести в качестве ответа на данное
+# задание. Код будет выведен в консоли интерпретатора, в котором вы запускаете
+# тест. Не забудьте в конце теста добавить проверки на ожидаемый результат
     def solve_quiz_and_get_code(self):
-        alert = self.browser.switch_to.alert    # Переключаемся на алерт
-        x = alert.text.split(" ")[2]    #парсим сообщения алерта, для получения значения x
-        answer = str(math.log(abs((12 * math.sin(float(x))))))  #производим расчет
-        alert.send_keys(answer) #Производим ввод ответа в окно alert
+        alert = self.browser.switch_to.alert        # Переключаемся на алерт
+        # парсим сообщения алерта, для получения значения x
+        x = alert.text.split(" ")[2]   
+        # производим расчет
+        answer = str(math.log(abs((12 * math.sin(float(x))))))  
+        alert.send_keys(answer) # Производим ввод ответа в окно alert
         alert.accept()
         try:
-            alert = self.browser.switch_to.alert  # Переключаемся на алерт для считывания ответа системы на активацию кнопки на добавление в корзину
+            # Переключаемся на алерт для считывания ответа системы на 
+            # активацию кнопки на добавление в корзину
+            alert = self.browser.switch_to.alert  
             alert_text = alert.text
             print(f"Your code: {alert_text}")   
             alert.accept()
